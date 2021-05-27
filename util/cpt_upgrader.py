@@ -224,7 +224,7 @@ def process_file(path, **kwargs):
         tags = set((''.join(cpt.get('Globals','version_tags'))).split())
     else:
         print "fatal: no version information in checkpoint"
-        exit(1)
+        sys.exit(1)
 
     verboseprint("has tags", ' '.join(tags))
     # If the current checkpoint has a tag we don't know about, we have
@@ -243,7 +243,7 @@ def process_file(path, **kwargs):
         if not ready:
             print "could not apply these upgrades:", ' '.join(to_apply)
             print "update dependences impossible to resolve; aborting"
-            exit(1)
+            sys.exit(1)
 
         for tag in ready:
             Upgrader.get(tag).update(cpt, tags)
@@ -290,7 +290,7 @@ if __name__ == '__main__':
         for tag in Upgrader.tag_set:
             print "  \"%s\"," % tag
         print "};"
-        exit(0)
+        sys.exit(0)
     elif len(args) != 1:
         parser.error("You must specify a checkpoint file to modify or a "\
                      "directory of checkpoints to recursively update")

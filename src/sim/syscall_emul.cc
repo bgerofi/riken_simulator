@@ -1020,7 +1020,7 @@ getegidFunc(SyscallDesc *desc, int callnum, Process *process,
 SyscallReturn
 fallocateFunc(SyscallDesc *desc, int callnum, Process *p, ThreadContext *tc)
 {
-#if NO_FALLOCATE
+#if NO_FALLOCATE==0
     warn("Host OS cannot support calls to fallocate. Ignoring syscall");
 #else
     int index = 0;
