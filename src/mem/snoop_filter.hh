@@ -45,6 +45,7 @@
 #ifndef __MEM_SNOOP_FILTER_HH__
 #define __MEM_SNOOP_FILTER_HH__
 
+#include <bitset>
 #include <unordered_map>
 #include <utility>
 
@@ -204,7 +205,8 @@ class SnoopFilter : public SimObject {
      * uint32_to slim down the footprint of the hash map (and
      * ultimately improve the simulation performance).
      */
-    typedef uint64_t SnoopMask;
+    #define SNOOP_MASK_BITS	(1024)
+    typedef std::bitset<SNOOP_MASK_BITS> SnoopMask;
 
     /**
     * Per cache line item tracking a bitmask of SlavePorts who have an
@@ -314,7 +316,7 @@ SnoopFilter::maskToPortList(SnoopMask port_mask) const
 {
     SnoopList res;
     for (const auto& p : slavePorts)
-        if (port_mask & portToMask(*p))
+        if ((port_mask & portToMask(*p)).any())
             res.push_back(p);
     return res;
 }
