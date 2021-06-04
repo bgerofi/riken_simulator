@@ -181,6 +181,9 @@ exitImpl(SyscallDesc *desc, int callnum, Process *p, ThreadContext *tc,
             if ((*p->fds)[i])
                 p->fds->closeFDEntry(i);
         }
+
+        tc->halt();
+        exitSimLoop("exit() called");
     }
 
     tc->halt();
