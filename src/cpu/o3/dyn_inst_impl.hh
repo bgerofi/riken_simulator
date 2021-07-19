@@ -121,6 +121,7 @@ BaseO3DynInst<Impl>::initVars()
     completeTick = -1;
     commitTick = -1;
     storeTick = -1;
+    fromMemory = false;
 #endif
 }
 

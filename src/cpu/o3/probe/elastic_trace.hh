@@ -274,6 +274,10 @@ class ElasticTrace : public ProbeListenerObject
         Tick commitTick;
         /* If instruction was committed, as against squashed. */
         bool commit;
+        /* Tick when instruction was in fetch stage. */
+        Tick fetchTick;
+        /* If instruction is memory instruction that reached main memory. */
+        bool fromMemory;
         /* List of order dependencies. */
         std::list<InstSeqNum> robDepList;
         /* List of physical register RAW dependencies. */

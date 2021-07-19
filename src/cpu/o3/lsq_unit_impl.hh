@@ -115,6 +115,7 @@ LSQUnit<Impl>::completeDataAccess(PacketPtr pkt)
     LSQSenderState *state = dynamic_cast<LSQSenderState *>(pkt->senderState);
     DynInstPtr inst = state->inst;
 
+    inst->fromMemory = pkt->isFromMemory();
     cpu->ppDataAccessComplete->notify(std::make_pair(inst, pkt));
 
     /* Notify the sender state that the access is complete (for ownership

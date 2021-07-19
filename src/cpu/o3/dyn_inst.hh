@@ -143,6 +143,7 @@ class BaseO3DynInst : public BaseDynInst<Impl>
     int32_t completeTick;
     int32_t commitTick;
     int32_t storeTick;
+    bool fromMemory;
 #endif
 
 

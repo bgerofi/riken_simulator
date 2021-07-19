@@ -372,6 +372,7 @@ class Request
     /** A pointer to an atomic operation */
     AtomicOpFunctorPtr atomicOpFunctor;
 
+    bool _fromMemory;
   public:
 
     /**
@@ -383,8 +384,8 @@ class Request
         : _paddr(0), _size(0), _masterId(invldMasterId), _time(0),
           _taskId(ContextSwitchTaskId::Unknown), _asid(0), _vaddr(0),
           _extraData(0), _contextId(0), _pc(0),
-          _reqInstSeqNum(0), atomicOpFunctor(nullptr), translateDelta(0),
-          accessDelta(0), depth(0)
+          _reqInstSeqNum(0), atomicOpFunctor(nullptr), _fromMemory(false),
+          translateDelta(0), accessDelta(0), depth(0)
     {}
 
     Request(Addr paddr, unsigned size, Flags flags, MasterID mid,
@@ -392,8 +393,9 @@ class Request
         : _paddr(0), _size(0), _masterId(invldMasterId), _time(0),
           _taskId(ContextSwitchTaskId::Unknown), _asid(0), _vaddr(0),
           _extraData(0), _contextId(0), _pc(0),
-          _reqInstSeqNum(seq_num), atomicOpFunctor(nullptr), translateDelta(0),
-          accessDelta(0), depth(0)
+          _reqInstSeqNum(seq_num), atomicOpFunctor(nullptr),
+          _fromMemory(false), translateDelta(0), accessDelta(0),
+          depth(0)
     {
         setPhys(paddr, size, flags, mid, curTick());
         setContext(cid);
@@ -409,8 +411,8 @@ class Request
         : _paddr(0), _size(0), _masterId(invldMasterId), _time(0),
           _taskId(ContextSwitchTaskId::Unknown), _asid(0), _vaddr(0),
           _extraData(0), _contextId(0), _pc(0),
-          _reqInstSeqNum(0), atomicOpFunctor(nullptr), translateDelta(0),
-          accessDelta(0), depth(0)
+          _reqInstSeqNum(0), atomicOpFunctor(nullptr), _fromMemory(false),
+          translateDelta(0), accessDelta(0), depth(0)
     {
         setPhys(paddr, size, flags, mid, curTick());
     }
@@ -419,8 +421,8 @@ class Request
         : _paddr(0), _size(0), _masterId(invldMasterId), _time(0),
           _taskId(ContextSwitchTaskId::Unknown), _asid(0), _vaddr(0),
           _extraData(0), _contextId(0), _pc(0),
-          _reqInstSeqNum(0), atomicOpFunctor(nullptr), translateDelta(0),
-          accessDelta(0), depth(0)
+          _reqInstSeqNum(0), atomicOpFunctor(nullptr), _fromMemory(false),
+          translateDelta(0), accessDelta(0), depth(0)
     {
         setPhys(paddr, size, flags, mid, time);
     }
@@ -430,8 +432,8 @@ class Request
         : _paddr(0), _size(0), _masterId(invldMasterId), _time(0),
           _taskId(ContextSwitchTaskId::Unknown), _asid(0), _vaddr(0),
           _extraData(0), _contextId(0), _pc(pc),
-          _reqInstSeqNum(0), atomicOpFunctor(nullptr), translateDelta(0),
-          accessDelta(0), depth(0)
+          _reqInstSeqNum(0), atomicOpFunctor(nullptr), _fromMemory(false),
+          translateDelta(0), accessDelta(0), depth(0)
     {
         setPhys(paddr, size, flags, mid, time);
         privateFlags.set(VALID_PC);
@@ -443,8 +445,8 @@ class Request
           _masterId(invldMasterId), _time(0),
           _taskId(ContextSwitchTaskId::Unknown), _asid(0), _vaddr(0),
           _extraData(0), _contextId(0), _pc(0),
-          _reqInstSeqNum(0), atomicOpFunctor(nullptr), translateDelta(0),
-          accessDelta(0), depth(0)
+          _reqInstSeqNum(0), atomicOpFunctor(nullptr), _fromMemory(false),
+          translateDelta(0), accessDelta(0), depth(0)
     {
         setVirt(asid, vaddr, size, flags, mid, pc);
         setContext(cid);
@@ -452,7 +454,7 @@ class Request
 
     Request(int asid, Addr vaddr, unsigned size, Flags flags,
             MasterID mid, Addr pc, ContextID cid,
-            AtomicOpFunctorPtr atomic_op)
+            AtomicOpFunctorPtr atomic_op): _fromMemory(false)
     {
         setVirt(asid, vaddr, size, flags, mid, pc, std::move(atomic_op));
         setContext(cid);
@@ -468,7 +470,7 @@ class Request
           _taskId(other._taskId), _asid(other._asid), _vaddr(other._vaddr),
           _extraData(other._extraData), _contextId(other._contextId),
           _pc(other._pc), _reqInstSeqNum(other._reqInstSeqNum),
-          translateDelta(other.translateDelta),
+          _fromMemory(false), translateDelta(other.translateDelta),
           accessDelta(other.accessDelta), depth(other.depth)
     {
 
@@ -478,6 +480,8 @@ class Request
 
     ~Request() {}
 
+    void setFromMemory() { _fromMemory = true; }
+    bool isFromMemory() const { return _fromMemory; }
     /**
      * Set up Context numbers.
      */

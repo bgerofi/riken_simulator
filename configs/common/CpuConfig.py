@@ -98,6 +98,7 @@ def config_etrace(cpu_cls, cpu_list, options):
             # is attached to.
             cpu.traceListener = m5.objects.ElasticTrace(
                                 instFetchTraceFile = options.inst_trace_file,
+                                traceVirtAddr = True,
                                 dataDepTraceFile = options.data_trace_file,
                                 depWindowSize = 3 * cpu.numROBEntries)
             # Make the number of entries in the ROB, LQ and SQ very
