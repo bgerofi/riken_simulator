@@ -263,6 +263,7 @@ DRAMCtrl::recvAtomic(PacketPtr pkt)
 
     // do the actual memory access and turn the packet into a response
     access(pkt);
+    pkt->setFromMemory();
 
     Tick latency = 0;
     if (pkt->hasData()) {
@@ -879,6 +880,7 @@ DRAMCtrl::accessAndRespond(PacketPtr pkt, Tick static_latency)
     // do the actual memory access which also turns the packet into a
     // response
     access(pkt);
+    pkt->setFromMemory();
 
     // turn packet around to go back to requester if response expected
     if (needsResponse) {
@@ -2644,6 +2646,7 @@ DRAMCtrl::recvFunctional(PacketPtr pkt)
 {
     // rely on the abstract memory
     functionalAccess(pkt);
+    pkt->setFromMemory();
 }
 
 BaseSlavePort&

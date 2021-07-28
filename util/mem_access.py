@@ -290,7 +290,6 @@ def decode_deps(proto_in, flags=[]):
     packet = inst_dep_record_pb2.InstDepRecord()
 
     while protolib.decodeMessage(proto_in, packet):
-        print(str(packet))
         if not packet.HasField('p_addr'):
             continue
         # Not present in dependency trace.

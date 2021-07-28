@@ -155,6 +155,7 @@ Tick
 DRAMSim2::recvAtomic(PacketPtr pkt)
 {
     access(pkt);
+    pkt->setFromMemory();
 
     // 50 ns is just an arbitrary value at this point
     return pkt->cacheResponding() ? 0 : 50000;
@@ -166,6 +167,7 @@ DRAMSim2::recvFunctional(PacketPtr pkt)
     pkt->pushLabel(name());
 
     functionalAccess(pkt);
+    pkt->setFromMemory();
 
     // potentially update the packets in our response queue as well
     for (auto i = responseQueue.begin(); i != responseQueue.end(); ++i)
@@ -257,6 +259,7 @@ DRAMSim2::accessAndRespond(PacketPtr pkt)
     // do the actual memory access which also turns the packet into a
     // response
     access(pkt);
+    pkt->setFromMemory();
 
     // turn packet around to go back to requester if response expected
     if (needsResponse) {
