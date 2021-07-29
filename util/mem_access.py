@@ -301,9 +301,14 @@ def decode_deps(proto_in, flags=[]):
             continue
         if not packet.HasField('tick'):
             continue
+        if not packet.HasField('comp_delay'):
+            continue
+        if not packet.HasField('hwthread'):
+            continue
 
-        print('{} {} {} {} {} {} {}'.format(
+        print('{} {} {} {} {} {} {} {}'.format(
             packet.tick,
+            packet.hwthread,
             enumNames[packet.type],
             hex(packet.p_addr),
             hex(packet.v_addr),

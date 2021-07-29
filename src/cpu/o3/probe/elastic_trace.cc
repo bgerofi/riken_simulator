@@ -417,6 +417,7 @@ ElasticTrace::addDepTraceRecord(const DynInstConstPtr& head_inst,
     // Assign the timing information stored in the execution info object
     new_record->fetchTick = head_inst->fetchTick;
     new_record->fromMemory = head_inst->fromMemory;
+    new_record->hwthread = head_inst->threadNumber;
     new_record->executeTick = exec_info_ptr->executeTick;
     new_record->toCommitTick = exec_info_ptr->toCommitTick;
     new_record->commitTick = curTick();
@@ -832,6 +833,7 @@ ElasticTrace::writeDepTrace(uint32_t num_to_write)
             dep_pkt.set_latency(temp_ptr->commitTick - temp_ptr->fetchTick);
             dep_pkt.set_tick(temp_ptr->fetchTick);
             dep_pkt.set_from_memory(temp_ptr->fromMemory);
+            dep_pkt.set_hwthread(temp_ptr->hwthread);
             dep_pkt.set_seq_num(temp_ptr->instNum);
             dep_pkt.set_type(temp_ptr->type);
             dep_pkt.set_pc(temp_ptr->pc);

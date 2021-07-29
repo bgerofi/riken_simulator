@@ -84,4 +84,5 @@ message InstDepRecord {
   required uint32 latency = 13;
   required uint64 tick = 14;
   optional bool from_memory = 15;
+  required uint32 hwthread = 16;
 }

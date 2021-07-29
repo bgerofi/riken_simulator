@@ -278,6 +278,8 @@ class ElasticTrace : public ProbeListenerObject
         Tick fetchTick;
         /* If instruction is memory instruction that reached main memory. */
         bool fromMemory;
+        /* The thread this instruction is from. See base_dyn_inst.hh */
+        ThreadID hwthread;
         /* List of order dependencies. */
         std::list<InstSeqNum> robDepList;
         /* List of physical register RAW dependencies. */
