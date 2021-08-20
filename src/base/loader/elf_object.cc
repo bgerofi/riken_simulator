@@ -242,6 +242,9 @@ ElfObject::tryFile(const std::string &fname, size_t len, uint8_t *data,
                 continue;
 
             char *interp_path = (char*)data + phdr.p_offset;
+            if (getenv("GEM5_DL_INTERP")) {
+                interp_path = getenv("GEM5_DL_INTERP");
+            }
             int fd = open(interp_path, O_RDONLY);
             if (fd == -1)
                 fatal("Unable to open dynamic executable's interpreter.\n");
