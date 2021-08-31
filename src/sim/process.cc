@@ -342,13 +342,11 @@ Process::fixupStackFault(Addr vaddr)
     // We've accessed the next page of the stack, so extend it to include
     // this address.
     if (vaddr < stack_min && vaddr >= stack_base - max_stack_size) {
-        while (vaddr < stack_min) {
-            stack_min -= TheISA::PageBytes;
-            if (stack_base - stack_min > max_stack_size)
-                fatal("Maximum stack size exceeded\n");
-            allocateMem(stack_min, TheISA::PageBytes);
-            inform("Increasing stack size by one page.");
-        }
+        allocateMem(roundDown(vaddr, TheISA::PageBytes),
+            stack_min - roundDown(vaddr, TheISA::PageBytes));
+        stack_min = roundDown(vaddr, TheISA::PageBytes);
+        inform("Increased stack to: 0x%lx - 0x%lx",
+                stack_min, stack_base);
         memState->setStackMin(stack_min);
         return true;
     }
