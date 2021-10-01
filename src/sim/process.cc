@@ -117,7 +117,8 @@ Process::Process(ProcessParams *params, EmulationPageTable *pTable,
       _pid(params->pid), _ppid(params->ppid),
       _pgid(params->pgid), drivers(params->drivers),
       fds(make_shared<FDArray>(params->input, params->output, params->errout)),
-      childClearTID(0)
+      childClearTID(0),
+      cloneFlags(0)
 {
     if (_pid >= System::maxPID)
         fatal("_pid is too large: %d", _pid);
@@ -155,6 +156,12 @@ Process::Process(ProcessParams *params, EmulationPageTable *pTable,
 }
 
 void
+Process::setCloneFlags(TheISA::IntReg flags)
+{
+    cloneFlags = flags;
+}
+
+void
 Process::clone(ThreadContext *otc, ThreadContext *ntc,
                Process *np, TheISA::IntReg flags)
 {
@@ -165,7 +172,6 @@ Process::clone(ThreadContext *otc, ThreadContext *ntc,
          * and the old process. Changes in one will be visible in the other
          * due to the pointer use.
          */
-        delete np->pTable;
         np->pTable = pTable;
         ntc->getMemProxy().setPageTable(np->pTable);
 
@@ -286,7 +292,10 @@ Process::initState()
     // mark this context as active so it will start ticking.
     tc->activate();
 
-    pTable->initState(tc);
+    // Only initialize PT if not sharing address space with parent
+    if (!(P_CLONE_VM & cloneFlags)) {
+        pTable->initState(tc);
+    }
 }
 
 DrainState

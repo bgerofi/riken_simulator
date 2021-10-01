@@ -124,7 +124,11 @@ void
 ArmProcess64::initState()
 {
     Process::initState();
-    argsInit<uint64_t>(PageBytes, INTREG_SP0);
+
+    if (!(cloneFlags & P_CLONE_VM)) {
+        argsInit<uint64_t>(PageBytes, INTREG_SP0);
+    }
+
     for (int i = 0; i < contextIds.size(); i++) {
         ThreadContext * tc = system->getThreadContext(contextIds[i]);
         CPSR cpsr = tc->readMiscReg(MISCREG_CPSR);

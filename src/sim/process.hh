@@ -215,6 +215,10 @@ class Process : public SimObject
     // Process was forked with SIGCHLD set.
     bool *sigchld;
 
+    // Process clone flags at creation time (if cloned)
+    TheISA::IntReg cloneFlags;
+    void setCloneFlags(TheISA::IntReg flags);
+
     static const unsigned P_CLONE_VM              = 0x00000100;
     static const unsigned P_CLONE_FS              = 0x00000200;
     static const unsigned P_CLONE_FILES           = 0x00000400;

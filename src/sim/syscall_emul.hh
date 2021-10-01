@@ -1325,6 +1325,7 @@ cloneFunc(SyscallDesc *desc, int callnum, Process *p, ThreadContext *tc)
         ptidBuf.copyOut(tc->getMemProxy());
     }
 
+    cp->setCloneFlags(flags);
     cp->initState();
     p->clone(tc, ctc, cp, OS::translateCloneFlag(flags));
 
