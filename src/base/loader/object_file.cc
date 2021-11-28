@@ -93,8 +93,8 @@ bool
 ObjectFile::loadSections(PortProxy& mem_proxy, Addr addr_mask, Addr offset)
 {
     return (loadSection(&text, mem_proxy, addr_mask, offset)
-            && loadSection(&data, mem_proxy, addr_mask, offset)
-            && loadSection(&bss, mem_proxy, addr_mask, offset));
+            && loadSection(&bss, mem_proxy, addr_mask, offset)
+            && loadSection(&data, mem_proxy, addr_mask, offset));
 }
 
 static bool
