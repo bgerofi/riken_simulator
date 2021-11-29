@@ -134,18 +134,22 @@ SETranslatingPortProxy::tryMemsetBlob(Addr addr, uint8_t val, int size) const
 {
     for (ChunkGenerator gen(addr, size, PageBytes); !gen.done(); gen.next()) {
         Addr paddr;
+        bool zeroed = false;
 
         if (!pTable->translate(gen.addr(), paddr)) {
             if (allocating == Always) {
                 process->allocateMem(roundDown(gen.addr(), PageBytes),
                                      PageBytes);
                 pTable->translate(gen.addr(), paddr);
+                zeroed = true;
             } else {
                 return false;
             }
         }
 
-        PortProxy::memsetBlob(paddr, val, gen.size());
+        if (val || !zeroed) {
+            PortProxy::memsetBlob(paddr, val, gen.size());
+        }
     }
 
     return true;
