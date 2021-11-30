@@ -62,13 +62,13 @@ class ChunkGenerator
     /** The starting address of the next chunk (after the current one). */
     Addr nextAddr;
     /** The size of the current chunk (in bytes). */
-    unsigned  curSize;
+    size_t  curSize;
     /** The number of bytes remaining in the region after the current chunk. */
-    unsigned  sizeLeft;
+    size_t  sizeLeft;
     /** The start address so we can calculate offset in writing block. */
     const Addr startAddr;
     /** The maximum chunk size, e.g., the cache block size or page size. */
-    const unsigned chunkSize;
+    const size_t chunkSize;
 
   public:
     /**
@@ -78,7 +78,7 @@ class ChunkGenerator
      * @param _chunkSize The size/alignment of chunks into which
      *    the region should be decomposed.
      */
-    ChunkGenerator(Addr _startAddr, unsigned totalSize, unsigned _chunkSize)
+    ChunkGenerator(Addr _startAddr, size_t totalSize, size_t _chunkSize)
         : startAddr(_startAddr), chunkSize(_chunkSize)
     {
         // chunkSize must be a power of two
@@ -102,7 +102,7 @@ class ChunkGenerator
         }
 
         // how many bytes are left between curAddr and the end of this chunk?
-        unsigned left_in_chunk = nextAddr - curAddr;
+        size_t left_in_chunk = nextAddr - curAddr;
         curSize = std::min(totalSize, left_in_chunk);
         sizeLeft = totalSize - curSize;
     }
@@ -110,10 +110,10 @@ class ChunkGenerator
     /** Return starting address of current chunk. */
     Addr addr() const { return curAddr; }
     /** Return size in bytes of current chunk. */
-    unsigned size() const { return curSize; }
+    size_t size() const { return curSize; }
 
     /** Number of bytes we have already chunked up. */
-    unsigned complete() const { return curAddr - startAddr; }
+    size_t complete() const { return curAddr - startAddr; }
 
     /**
      * Are we done?  That is, did the last call to next() advance
