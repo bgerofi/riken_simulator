@@ -325,6 +325,10 @@ ElfObject::ElfObject(const std::string &_filename, size_t _len,
             } else if (!strcmp(".bss", sec_name)) {
                 bss_sec_start = shdr.sh_addr;
                 bss_size = shdr.sh_size;
+            } else if (!strcmp(".gnu.build.attributes", sec_name)) {
+                gnu_build_attr.baseAddr = shdr.sh_addr;
+                gnu_build_attr.size = shdr.sh_size;
+                gnu_build_attr.fileImage = fileData + shdr.sh_offset;
             }
         } else {
             Elf_Error errorNum = (Elf_Error)elf_errno();

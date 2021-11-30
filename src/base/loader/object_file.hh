@@ -125,6 +125,7 @@ class ObjectFile
     Section text;
     Section data;
     Section bss;
+    Section gnu_build_attr;
 
     bool loadSection(Section *sec, PortProxy& mem_proxy, Addr mask,
                      Addr offset = 0);

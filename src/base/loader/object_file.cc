@@ -57,7 +57,8 @@ ObjectFile::ObjectFile(const string &_filename,
                        Arch _arch, OpSys _op_sys)
     : filename(_filename), fileData(_data), len(_len),
       arch(_arch), opSys(_op_sys), entry(0), globalPtr(0),
-      text{0, nullptr, 0}, data{0, nullptr, 0}, bss{0, nullptr, 0}
+      text{0, nullptr, 0}, data{0, nullptr, 0}, bss{0, nullptr, 0},
+      gnu_build_attr{0, nullptr, 0}
 {
 }
 
@@ -94,7 +95,10 @@ ObjectFile::loadSections(PortProxy& mem_proxy, Addr addr_mask, Addr offset)
 {
     return (loadSection(&text, mem_proxy, addr_mask, offset)
             && loadSection(&bss, mem_proxy, addr_mask, offset)
-            && loadSection(&data, mem_proxy, addr_mask, offset));
+            && loadSection(&data, mem_proxy, addr_mask, offset)
+            && (gnu_build_attr.baseAddr ?
+                loadSection(&gnu_build_attr, mem_proxy, addr_mask, offset)
+                : true));
 }
 
 static bool
