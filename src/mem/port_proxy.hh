@@ -99,17 +99,17 @@ class PortProxy
     /**
      * Read size bytes memory at address and store in p.
      */
-    virtual void readBlob(Addr addr, uint8_t* p, int size) const;
+    virtual void readBlob(Addr addr, uint8_t* p, size_t size) const;
 
     /**
      * Write size bytes from p to address.
      */
-    virtual void writeBlob(Addr addr, const uint8_t* p, int size) const;
+    virtual void writeBlob(Addr addr, const uint8_t* p, size_t size) const;
 
     /**
      * Fill size bytes starting at addr with byte value val.
      */
-    virtual void memsetBlob(Addr addr, uint8_t v, int size) const;
+    virtual void memsetBlob(Addr addr, uint8_t v, size_t size) const;
 
     /**
      * Read sizeof(T) bytes from address and return as object T.

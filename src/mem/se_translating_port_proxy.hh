@@ -85,15 +85,15 @@ class SETranslatingPortProxy : public PortProxy
 
     void setPageTable(EmulationPageTable *p) { pTable = p; }
     void setProcess(Process *p) { process = p; }
-    bool tryReadBlob(Addr addr, uint8_t *p, int size) const;
-    bool tryWriteBlob(Addr addr, const uint8_t *p, int size) const;
-    bool tryMemsetBlob(Addr addr, uint8_t val, int size) const;
+    bool tryReadBlob(Addr addr, uint8_t *p, size_t size) const;
+    bool tryWriteBlob(Addr addr, const uint8_t *p, size_t size) const;
+    bool tryMemsetBlob(Addr addr, uint8_t val, size_t size) const;
     bool tryWriteString(Addr addr, const char *str) const;
     bool tryReadString(std::string &str, Addr addr) const;
 
-    virtual void readBlob(Addr addr, uint8_t *p, int size) const;
-    virtual void writeBlob(Addr addr, const uint8_t *p, int size) const;
-    virtual void memsetBlob(Addr addr, uint8_t val, int size) const;
+    virtual void readBlob(Addr addr, uint8_t *p, size_t size) const;
+    virtual void writeBlob(Addr addr, const uint8_t *p, size_t size) const;
+    virtual void memsetBlob(Addr addr, uint8_t val, size_t size) const;
 
     void writeString(Addr addr, const char *str) const;
     void readString(std::string &str, Addr addr) const;

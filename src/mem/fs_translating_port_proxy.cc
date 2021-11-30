@@ -73,7 +73,7 @@ FSTranslatingPortProxy::~FSTranslatingPortProxy()
 }
 
 void
-FSTranslatingPortProxy::readBlob(Addr addr, uint8_t *p, int size) const
+FSTranslatingPortProxy::readBlob(Addr addr, uint8_t *p, size_t size) const
 {
     Addr paddr;
     for (ChunkGenerator gen(addr, size, TheISA::PageBytes); !gen.done();
@@ -90,7 +90,8 @@ FSTranslatingPortProxy::readBlob(Addr addr, uint8_t *p, int size) const
 }
 
 void
-FSTranslatingPortProxy::writeBlob(Addr addr, const uint8_t *p, int size) const
+FSTranslatingPortProxy::writeBlob(Addr addr, const uint8_t *p,
+                                  size_t size) const
 {
     Addr paddr;
     for (ChunkGenerator gen(addr, size, TheISA::PageBytes); !gen.done();
@@ -107,7 +108,7 @@ FSTranslatingPortProxy::writeBlob(Addr addr, const uint8_t *p, int size) const
 }
 
 void
-FSTranslatingPortProxy::memsetBlob(Addr address, uint8_t v, int size) const
+FSTranslatingPortProxy::memsetBlob(Addr address, uint8_t v, size_t size) const
 {
     Addr paddr;
     for (ChunkGenerator gen(address, size, TheISA::PageBytes); !gen.done();

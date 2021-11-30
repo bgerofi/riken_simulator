@@ -42,7 +42,7 @@
 #include "base/chunk_generator.hh"
 
 void
-PortProxy::readBlob(Addr addr, uint8_t *p, int size) const
+PortProxy::readBlob(Addr addr, uint8_t *p, size_t size) const
 {
     for (ChunkGenerator gen(addr, size, _cacheLineSize); !gen.done();
          gen.next()) {
@@ -55,7 +55,7 @@ PortProxy::readBlob(Addr addr, uint8_t *p, int size) const
 }
 
 void
-PortProxy::writeBlob(Addr addr, const uint8_t *p, int size) const
+PortProxy::writeBlob(Addr addr, const uint8_t *p, size_t size) const
 {
     for (ChunkGenerator gen(addr, size, _cacheLineSize); !gen.done();
          gen.next()) {
@@ -68,7 +68,7 @@ PortProxy::writeBlob(Addr addr, const uint8_t *p, int size) const
 }
 
 void
-PortProxy::memsetBlob(Addr addr, uint8_t v, int size) const
+PortProxy::memsetBlob(Addr addr, uint8_t v, size_t size) const
 {
     // quick and dirty...
     uint8_t *buf = new uint8_t[size];

@@ -85,16 +85,16 @@ class FSTranslatingPortProxy : public PortProxy
 
     /** Version of readblob that translates virt->phys and deals
       * with page boundries. */
-    virtual void readBlob(Addr addr, uint8_t *p, int size) const;
+    virtual void readBlob(Addr addr, uint8_t *p, size_t size) const;
 
     /** Version of writeBlob that translates virt->phys and deals
       * with page boundries. */
-    virtual void writeBlob(Addr addr, const uint8_t *p, int size) const;
+    virtual void writeBlob(Addr addr, const uint8_t *p, size_t size) const;
 
     /**
      * Fill size bytes starting at addr with byte value val.
      */
-    virtual void memsetBlob(Addr address, uint8_t  v, int size) const;
+    virtual void memsetBlob(Addr address, uint8_t  v, size_t size) const;
 };
 
 void CopyOut(ThreadContext *tc, void *dest, Addr src, size_t cplen);

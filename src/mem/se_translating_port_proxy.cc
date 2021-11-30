@@ -65,7 +65,7 @@ SETranslatingPortProxy::~SETranslatingPortProxy()
 { }
 
 bool
-SETranslatingPortProxy::tryReadBlob(Addr addr, uint8_t *p, int size) const
+SETranslatingPortProxy::tryReadBlob(Addr addr, uint8_t *p, size_t size) const
 {
     int prevSize = 0;
 
@@ -83,7 +83,7 @@ SETranslatingPortProxy::tryReadBlob(Addr addr, uint8_t *p, int size) const
 }
 
 void
-SETranslatingPortProxy::readBlob(Addr addr, uint8_t *p, int size) const
+SETranslatingPortProxy::readBlob(Addr addr, uint8_t *p, size_t size) const
 {
     if (!tryReadBlob(addr, p, size))
         fatal("readBlob(0x%x, ...) failed", addr);
@@ -92,7 +92,7 @@ SETranslatingPortProxy::readBlob(Addr addr, uint8_t *p, int size) const
 
 bool
 SETranslatingPortProxy::tryWriteBlob(Addr addr, const uint8_t *p,
-                                     int size) const
+                                     size_t size) const
 {
     int prevSize = 0;
 
@@ -123,14 +123,16 @@ SETranslatingPortProxy::tryWriteBlob(Addr addr, const uint8_t *p,
 
 
 void
-SETranslatingPortProxy::writeBlob(Addr addr, const uint8_t *p, int size) const
+SETranslatingPortProxy::writeBlob(Addr addr, const uint8_t *p,
+                                  size_t size) const
 {
     if (!tryWriteBlob(addr, p, size))
         fatal("writeBlob(0x%x, ...) failed", addr);
 }
 
 bool
-SETranslatingPortProxy::tryMemsetBlob(Addr addr, uint8_t val, int size) const
+SETranslatingPortProxy::tryMemsetBlob(Addr addr, uint8_t val,
+                                      size_t size) const
 {
     for (ChunkGenerator gen(addr, size, PageBytes); !gen.done(); gen.next()) {
         Addr paddr;
@@ -156,7 +158,7 @@ SETranslatingPortProxy::tryMemsetBlob(Addr addr, uint8_t val, int size) const
 }
 
 void
-SETranslatingPortProxy::memsetBlob(Addr addr, uint8_t val, int size) const
+SETranslatingPortProxy::memsetBlob(Addr addr, uint8_t val, size_t size) const
 {
     if (!tryMemsetBlob(addr, val, size))
         fatal("memsetBlob(0x%x, ...) failed", addr);
