@@ -306,6 +306,7 @@ ElfObject::ElfObject(const std::string &_filename, size_t _len,
     Addr text_sec_start = 0;
     Addr data_sec_start = 0;
     Addr bss_sec_start = 0;
+    size_t bss_size = 0;
 
     // Get the first section
     Elf_Scn *section = elf_getscn(elf, sec_idx);
@@ -323,6 +324,7 @@ ElfObject::ElfObject(const std::string &_filename, size_t _len,
                 data_sec_start = shdr.sh_addr;
             } else if (!strcmp(".bss", sec_name)) {
                 bss_sec_start = shdr.sh_addr;
+                bss_size = shdr.sh_size;
             }
         } else {
             Elf_Error errorNum = (Elf_Error)elf_errno();
@@ -352,11 +354,11 @@ ElfObject::ElfObject(const std::string &_filename, size_t _len,
         ldMax = std::max(ldMax, phdr.p_vaddr + phdr.p_memsz);
 
         // Check to see if this segment contains the bss section.
-        if (phdr.p_paddr <= bss_sec_start &&
-            phdr.p_paddr + phdr.p_memsz > bss_sec_start &&
+        if (phdr.p_vaddr <= bss_sec_start &&
+            phdr.p_vaddr + phdr.p_memsz >= bss_sec_start + bss_size &&
             phdr.p_memsz - phdr.p_filesz > 0) {
-            bss.baseAddr = phdr.p_paddr + phdr.p_filesz;
-            bss.size = phdr.p_memsz - phdr.p_filesz;
+            bss.baseAddr = phdr.p_vaddr;
+            bss.size = phdr.p_memsz;
             bss.fileImage = NULL;
         }
 
