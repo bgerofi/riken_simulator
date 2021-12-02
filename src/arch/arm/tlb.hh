@@ -412,6 +412,7 @@ protected:
     bool haveLargeAsid64;
 
     AddrRange m5opRange;
+    uint64_t validMask;
 
     void updateMiscReg(ThreadContext *tc,
                        ArmTranslationType tranType = NormalTran);

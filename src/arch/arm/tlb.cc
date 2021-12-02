@@ -44,6 +44,9 @@
 
 #include "arch/arm/tlb.hh"
 
+#include <unistd.h>
+
+#include <cstdlib>
 #include <memory>
 #include <string>
 #include <vector>
@@ -80,7 +83,8 @@ TLB::TLB(const ArmTLBParams *p)
       stage2Mmu(NULL), test(nullptr), rangeMRU(1),
       aarch64(false), aarch64EL(EL0), isPriv(false), isSecure(false),
       isHyp(false), asid(0), vmid(0), hcr(0), dacr(0),
-      miscRegValid(false), miscRegContext(0), curTranType(NormalTran)
+      miscRegValid(false), miscRegContext(0), curTranType(NormalTran),
+      validMask(0)
 {
     const ArmSystem *sys = dynamic_cast<const ArmSystem *>(p->sys);
 
@@ -593,8 +597,16 @@ TLB::translateSe(RequestPtr req, ThreadContext *tc, Mode mode,
     Addr paddr;
     Process *p = tc->getProcessPtr();
 
-    if (!p->pTable->translate(vaddr, paddr))
+    if (!p->pTable->translate(vaddr, paddr)) {
+        if (!validMask && getenv("GEM5_VALID_ADDR_MASK")) {
+            validMask = strtoul(getenv("GEM5_VALID_ADDR_MASK"), NULL, 16);
+        }
+
+        if (validMask && (vaddr_tainted & ~validMask)) {
+            vaddr_tainted &= validMask;
+        }
         return std::make_shared<GenericPageTableFault>(vaddr_tainted);
+    }
     req->setPaddr(paddr);
 
     return finalizePhysical(req, tc, mode);
